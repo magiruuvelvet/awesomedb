@@ -19,9 +19,9 @@ target_compile_definitions(${CURRENT_TARGET} PRIVATE -DQT_NO_FOREACH)
 
 target_link_libraries(${CURRENT_TARGET}
     PRIVATE
-        Qt5::Core
         Qt5::Sql
     PUBLIC
+        Qt5::Core
         fmt
 )
 
