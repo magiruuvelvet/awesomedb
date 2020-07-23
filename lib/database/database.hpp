@@ -21,6 +21,9 @@ public:
     // forward id type
     using id_t = Model::id_t;
 
+#define DATABSE_ENABLE_IF_MODEL \
+    typename = std::enable_if_t<std::is_base_of<Model, ModelType>::value>
+
     /**
      * Registers a new model in the database registrar for automatic construction.
      * Unregistered models will not be constructed when using any of the database
@@ -29,7 +32,7 @@ public:
      *
      * Usage: Database::registerModel<MyModel>();
      */
-    template<typename ModelType, typename = std::enable_if<std::is_base_of<Model, ModelType>::value>>
+    template<typename ModelType, DATABSE_ENABLE_IF_MODEL>
     static void registerModel()
     {
         DatabaseRegistrar::register_model<ModelType>(
@@ -102,7 +105,7 @@ public:
     /**
      * Finds the given model record for the given id.
      */
-    template<typename ModelType, typename = std::enable_if<std::is_base_of<Model, ModelType>::value>>
+    template<typename ModelType, DATABSE_ENABLE_IF_MODEL>
     ModelType findRecord(id_t id, bool *error = nullptr) const
     {
         const std::lock_guard lock{this->_mutex};
@@ -117,7 +120,7 @@ public:
      * Finds a single record using a filter pattern.
      * The filter pattern is NOT injection protected!! Don't use user data for the filter.
      */
-    template<typename ModelType, typename = std::enable_if<std::is_base_of<Model, ModelType>::value>>
+    template<typename ModelType, DATABSE_ENABLE_IF_MODEL>
     ModelType findRecord(const std::string filter, bool *error = nullptr) const
     {
         const std::lock_guard lock{this->_mutex};
@@ -131,7 +134,7 @@ public:
     /**
      * Finds the entire table of the given model.
      */
-    template<typename ModelType, typename = std::enable_if<std::is_base_of<Model, ModelType>::value>>
+    template<typename ModelType, DATABSE_ENABLE_IF_MODEL>
     std::list<ModelType> findAll(bool *error = nullptr) const
     {
         const std::lock_guard lock{this->_mutex};
@@ -151,7 +154,7 @@ public:
      * Finds the entire table of the given model using a filter pattern.
      * The filter pattern is NOT injection protected!! Don't use user data for the filter.
      */
-    template<typename ModelType, typename = std::enable_if<std::is_base_of<Model, ModelType>::value>>
+    template<typename ModelType, DATABSE_ENABLE_IF_MODEL>
     std::list<ModelType> findAll(const std::string &filter, bool *error = nullptr) const
     {
         const std::lock_guard lock{this->_mutex};
